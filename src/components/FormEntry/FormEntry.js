@@ -1,33 +1,12 @@
 import { Component } from "react";
 import Employee from "../Employee/Employee";
+import FormSubmit from "../FormSubmit/FormSubmit";
 
-class Form extends Component {
-  state = {
-    name: "",
-    department: "",
-    rating: 0,
-    person: [],
-  };
-  person = (e) => {
-    e.preventDefault();
-    const details = {
-      id: this.state.person.length,
-      name: this.state.name,
-      department: this.state.department,
-      rating: this.state.rating,
-    };
-    this.setState({ name: "", department: "", rating: 0 });
-    const wholeDetails = [...this.state.person];
-    wholeDetails.push(details);
-    this.setState({ person: wholeDetails });
-  };
-
+export default class FormEntry extends Component {
+  state = { name: "", department: "", rating: 0, staffArray: [] };
+  updateStaff = (tempArray) => this.setState({ staffArray: tempArray });
+  resetValues = () => this.setState({ name: "", department: "", rating: 0 });
   render() {
-    const btnDisable =
-      this.state.name === "" ||
-      this.state.department === "" ||
-      this.state.rating <= 0 ||
-      this.state.rating > 5;
     return (
       <>
         <h1>EMPLOY FEEDBACK FORM</h1>
@@ -41,7 +20,6 @@ class Form extends Component {
             onChange={(e) => this.setState({ name: e.target.value })}
           />
           <br />
-
           <label htmlFor="department">Department :</label>
           <input
             type="text"
@@ -51,7 +29,6 @@ class Form extends Component {
             onChange={(e) => this.setState({ department: e.target.value })}
           />
           <br />
-
           <label htmlFor="rating">Rating :</label>
           <input
             type="number"
@@ -63,14 +40,14 @@ class Form extends Component {
             onChange={(e) => this.setState({ rating: e.target.value })}
           />
           <br />
-
-          <button type="submit" onClick={this.person} disabled={btnDisable}>
-            Submit
-          </button>
+          <FormSubmit
+            staffDetails={this.state}
+            updateStaff={this.updateStaff}
+            resetValues={this.resetValues}
+          />
         </form>
-        <Employee person={this.state.person} />
+        <Employee staffDetails={this.state.staffArray} />
       </>
     );
   }
 }
-export default Form;
